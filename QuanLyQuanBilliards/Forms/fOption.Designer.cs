@@ -1,0 +1,78 @@
+﻿namespace QuanLyQuanBilliards.Forms
+{
+    partial class fOption
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.btnQuanTriHeThong = new System.Windows.Forms.Button();
+            this.btnQuanLyBilliards = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btnQuanTriHeThong
+            // 
+            this.btnQuanTriHeThong.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuanTriHeThong.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.btnQuanTriHeThong.Location = new System.Drawing.Point(123, 42);
+            this.btnQuanTriHeThong.Name = "btnQuanTriHeThong";
+            this.btnQuanTriHeThong.Size = new System.Drawing.Size(331, 63);
+            this.btnQuanTriHeThong.TabIndex = 0;
+            this.btnQuanTriHeThong.Text = "Quản trị hệ thống";
+            this.btnQuanTriHeThong.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLyBilliards
+            // 
+            this.btnQuanLyBilliards.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuanLyBilliards.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.btnQuanLyBilliards.Location = new System.Drawing.Point(123, 142);
+            this.btnQuanLyBilliards.Name = "btnQuanLyBilliards";
+            this.btnQuanLyBilliards.Size = new System.Drawing.Size(331, 63);
+            this.btnQuanLyBilliards.TabIndex = 1;
+            this.btnQuanLyBilliards.Text = "Quản lý quán billiards";
+            this.btnQuanLyBilliards.UseVisualStyleBackColor = true;
+            // 
+            // fOption
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(481, 208);
+            this.Controls.Add(this.btnQuanLyBilliards);
+            this.Controls.Add(this.btnQuanTriHeThong);
+            this.MaximumSize = new System.Drawing.Size(620, 308);
+            this.MinimumSize = new System.Drawing.Size(620, 308);
+            this.Name = "fOption";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "fOption";
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button btnQuanTriHeThong;
+        private System.Windows.Forms.Button btnQuanLyBilliards;
+    }
+}

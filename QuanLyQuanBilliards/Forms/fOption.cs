@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace QuanLyQuanBilliards.Forms
+{
+    public partial class fOption : Form
+    {
+        private string vaiTro;
+
+        public fOption()
+        {
+            InitializeComponent();
+        }
+
+        public fOption(string vaiTroNguoiDung)
+        {
+            InitializeComponent();
+            this.vaiTro = vaiTroNguoiDung;
+            KiemTraQuyen();
+        }
+
+        private void KiemTraQuyen()
+        {
+            // Thiết lập quyền truy cập dựa trên vai trò
+            if (vaiTro == "Admin")
+            {
+                // Admin có thể sử dụng tất cả chức năng
+                btnQuanLyBilliards.Enabled = true;
+                btnQuanTriHeThong.Enabled = true;
+            }
+            else if (vaiTro == "Nhân viên")
+            {
+                // Nhân viên chỉ có thể sử dụng chức năng quản lý billiards
+                btnQuanLyBilliards.Enabled = true;
+                btnQuanTriHeThong.Enabled = false;
+
+                // Thay đổi màu sắc để hiển thị button bị vô hiệu hóa
+                btnQuanTriHeThong.ForeColor = Color.Gray;
+            }
+            else
+            {
+                // Các vai trò khác không có quyền gì
+                btnQuanLyBilliards.Enabled = false;
+                btnQuanTriHeThong.Enabled = false;
+                btnQuanLyBilliards.ForeColor = Color.Gray;
+                btnQuanTriHeThong.ForeColor = Color.Gray;
+            }
+
+            // Gán sự kiện click cho các button
+            btnQuanTriHeThong.Click += BtnQuanTriHeThong_Click;
+            btnQuanLyBilliards.Click += BtnQuanLyBilliards_Click;
+        }
+
+        private void BtnQuanTriHeThong_Click(object sender, EventArgs e)
+        {
+            if (vaiTro != "Admin")
+            {
+                MessageBox.Show("Bạn không có quyền sử dụng chức năng này!",
+             "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // TODO: Mở form quản trị hệ thống
+            MessageBox.Show("Chức năng quản trị hệ thống sẽ được triển khai!",
+       "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void BtnQuanLyBilliards_Click(object sender, EventArgs e)
+        {
+            if (vaiTro == "Admin" || vaiTro == "Nhân viên")
+            {
+                // TODO: Mở form quản lý billiards (fMain)
+                this.Hide();
+                fMain formMain = new fMain();
+                formMain.ShowDialog();
+                this.Show();
+            }
+            else
+            {
+                MessageBox.Show("Bạn không có quyền sử dụng chức năng này!",
+       "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+    }
+}
