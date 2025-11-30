@@ -66,10 +66,13 @@ namespace QuanLyQuanBilliards.Forms
              "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            // TODO: Mở form quản trị hệ thống
-            MessageBox.Show("Chức năng quản trị hệ thống sẽ được triển khai!",
-       "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (vaiTro == "Admin")
+            {
+                this.Hide();
+                fAdmin formAdmin = new fAdmin();
+                formAdmin.ShowDialog();
+                this.Show();
+            }    
         }
 
         private void BtnQuanLyBilliards_Click(object sender, EventArgs e)

@@ -206,6 +206,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_HuyHoaDon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="banhang">
+          <Parameter Name="BanID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_LayChiTietHoaDon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="banhang">
+          <Parameter Name="BanID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_ThanhToanDayDu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="banhang">
+          <Parameter Name="BanID" Type="int" Mode="In" />
+          <Parameter Name="TongTienCuoiCung" Type="decimal" Mode="In" />
+          <Parameter Name="TongTienTruocGiam" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_TinhTienBan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="banhang">
+          <Parameter Name="BanID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_BaoCaoDoanhThu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="baocao">
+          <Parameter Name="TuNgay" Type="date" Mode="In" />
+          <Parameter Name="DenNgay" Type="date" Mode="In" />
+        </Function>
         <EntityContainer Name="QuanLyQuanBilliardsModelStoreContainer">
           <EntitySet Name="HoaDon" EntityType="Self.HoaDon" Schema="banhang" store:Type="Tables" />
           <EntitySet Name="HoaDonChiTiet" EntityType="Self.HoaDonChiTiet" Schema="banhang" store:Type="Tables" />
@@ -514,7 +532,38 @@
             <End Role="NguoiDung" EntitySet="NguoiDungs" />
             <End Role="NhanVien" EntitySet="NhanViens" />
           </AssociationSet>
+          <FunctionImport Name="sp_HuyHoaDon">
+          <Parameter Name="BanID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_LayChiTietHoaDon" ReturnType="Collection(Int32)">
+          <Parameter Name="BanID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ThanhToanDayDu">
+            <Parameter Name="BanID" Mode="In" Type="Int32" />
+            <Parameter Name="TongTienCuoiCung" Mode="In" Type="Decimal" />
+            <Parameter Name="TongTienTruocGiam" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_TinhTienBan" ReturnType="Collection(QuanLyQuanBilliardsModel.sp_TinhTienBan_Result)">
+          <Parameter Name="BanID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_BaoCaoDoanhThu" ReturnType="Collection(QuanLyQuanBilliardsModel.sp_BaoCaoDoanhThu_Result)">
+            <Parameter Name="TuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="DenNgay" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="sp_TinhTienBan_Result">
+          <Property Type="Decimal" Name="TienDichVu" Nullable="false" Precision="38" Scale="6" />
+          <Property Type="Int32" Name="SoGiayChoi" Nullable="true" />
+          <Property Type="Decimal" Name="GiaTheoGio" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_BaoCaoDoanhThu_Result">
+          <Property Type="Int32" Name="Mã_HĐ" Nullable="false" />
+          <Property Type="String" Name="Tên_Bàn" Nullable="false" MaxLength="60" />
+          <Property Type="Decimal" Name="Tổng_Tiền" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Ngày_Thanh_Toán" Nullable="true" />
+          <Property Type="Decimal" Name="Giảm_Giá" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="String" Name="Loại_Giảm" Nullable="false" MaxLength="9" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -634,6 +683,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_HuyHoaDon" FunctionName="QuanLyQuanBilliardsModel.Store.sp_HuyHoaDon" />
+          <FunctionImportMapping FunctionImportName="sp_LayChiTietHoaDon" FunctionName="QuanLyQuanBilliardsModel.Store.sp_LayChiTietHoaDon" />
+          <FunctionImportMapping FunctionImportName="sp_ThanhToanDayDu" FunctionName="QuanLyQuanBilliardsModel.Store.sp_ThanhToanDayDu" />
+          <FunctionImportMapping FunctionImportName="sp_TinhTienBan" FunctionName="QuanLyQuanBilliardsModel.Store.sp_TinhTienBan">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLyQuanBilliardsModel.sp_TinhTienBan_Result">
+                <ScalarProperty Name="TienDichVu" ColumnName="TienDichVu" />
+                <ScalarProperty Name="SoGiayChoi" ColumnName="SoGiayChoi" />
+                <ScalarProperty Name="GiaTheoGio" ColumnName="GiaTheoGio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_BaoCaoDoanhThu" FunctionName="QuanLyQuanBilliardsModel.Store.sp_BaoCaoDoanhThu">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLyQuanBilliardsModel.sp_BaoCaoDoanhThu_Result">
+                <ScalarProperty Name="Mã_HĐ" ColumnName="Mã HĐ" />
+                <ScalarProperty Name="Tên_Bàn" ColumnName="Tên Bàn" />
+                <ScalarProperty Name="Tổng_Tiền" ColumnName="Tổng Tiền" />
+                <ScalarProperty Name="Ngày_Thanh_Toán" ColumnName="Ngày Thanh Toán" />
+                <ScalarProperty Name="Giảm_Giá" ColumnName="Giảm Giá" />
+                <ScalarProperty Name="Loại_Giảm" ColumnName="Loại Giảm" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

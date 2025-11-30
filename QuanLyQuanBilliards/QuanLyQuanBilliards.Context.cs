@@ -12,6 +12,8 @@ namespace QuanLyQuanBilliards
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class QuanLyQuanBilliardsEntities : DbContext
     {
@@ -35,5 +37,62 @@ namespace QuanLyQuanBilliards
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<NguoiDung> NguoiDungs { get; set; }
         public virtual DbSet<NhanVien> NhanViens { get; set; }
+    
+        public virtual int sp_HuyHoaDon(Nullable<int> banID)
+        {
+            var banIDParameter = banID.HasValue ?
+                new ObjectParameter("BanID", banID) :
+                new ObjectParameter("BanID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_HuyHoaDon", banIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> sp_LayChiTietHoaDon(Nullable<int> banID)
+        {
+            var banIDParameter = banID.HasValue ?
+                new ObjectParameter("BanID", banID) :
+                new ObjectParameter("BanID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("sp_LayChiTietHoaDon", banIDParameter);
+        }
+    
+        public virtual int sp_ThanhToanDayDu(Nullable<int> banID, Nullable<decimal> tongTienCuoiCung, Nullable<decimal> tongTienTruocGiam)
+        {
+            var banIDParameter = banID.HasValue ?
+                new ObjectParameter("BanID", banID) :
+                new ObjectParameter("BanID", typeof(int));
+    
+            var tongTienCuoiCungParameter = tongTienCuoiCung.HasValue ?
+                new ObjectParameter("TongTienCuoiCung", tongTienCuoiCung) :
+                new ObjectParameter("TongTienCuoiCung", typeof(decimal));
+    
+            var tongTienTruocGiamParameter = tongTienTruocGiam.HasValue ?
+                new ObjectParameter("TongTienTruocGiam", tongTienTruocGiam) :
+                new ObjectParameter("TongTienTruocGiam", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_ThanhToanDayDu", banIDParameter, tongTienCuoiCungParameter, tongTienTruocGiamParameter);
+        }
+    
+        public virtual ObjectResult<sp_TinhTienBan_Result> sp_TinhTienBan(Nullable<int> banID)
+        {
+            var banIDParameter = banID.HasValue ?
+                new ObjectParameter("BanID", banID) :
+                new ObjectParameter("BanID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_TinhTienBan_Result>("sp_TinhTienBan", banIDParameter);
+        }
+    
+        public virtual ObjectResult<sp_BaoCaoDoanhThu_Result> sp_BaoCaoDoanhThu(Nullable<System.DateTime> tuNgay, Nullable<System.DateTime> denNgay)
+        {
+            var tuNgayParameter = tuNgay.HasValue ?
+                new ObjectParameter("TuNgay", tuNgay) :
+                new ObjectParameter("TuNgay", typeof(System.DateTime));
+    
+            var denNgayParameter = denNgay.HasValue ?
+                new ObjectParameter("DenNgay", denNgay) :
+                new ObjectParameter("DenNgay", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BaoCaoDoanhThu_Result>("sp_BaoCaoDoanhThu", tuNgayParameter, denNgayParameter);
+        }
     }
 }
