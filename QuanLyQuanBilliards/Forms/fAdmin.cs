@@ -7,7 +7,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace QuanLyQuanBilliards.Forms
 {
-    // [QUAN TRỌNG]: Class fAdmin phải nằm ngay đây, không được có class nào đứng trước nó
     public partial class fAdmin : Form
     {
         private QuanLyQuanBilliardsEntities db = new QuanLyQuanBilliardsEntities();
@@ -22,10 +21,6 @@ namespace QuanLyQuanBilliards.Forms
         public fAdmin()
         {
             InitializeComponent();
-
-            // Cấu hình hiển thị Form
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.MinimumSize = new System.Drawing.Size(1000, 600);
 
             LoadData();
             AddBindings();

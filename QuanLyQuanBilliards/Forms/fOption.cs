@@ -52,10 +52,6 @@ namespace QuanLyQuanBilliards.Forms
                 btnQuanLyBilliards.ForeColor = Color.Gray;
                 btnQuanTriHeThong.ForeColor = Color.Gray;
             }
-
-            // Gán sự kiện click cho các button
-            btnQuanTriHeThong.Click += BtnQuanTriHeThong_Click;
-            btnQuanLyBilliards.Click += BtnQuanLyBilliards_Click;
         }
 
         private void BtnQuanTriHeThong_Click(object sender, EventArgs e)
