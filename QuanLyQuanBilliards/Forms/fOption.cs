@@ -68,7 +68,7 @@ namespace QuanLyQuanBilliards.Forms
                 fAdmin formAdmin = new fAdmin();
                 formAdmin.ShowDialog();
                 this.Show();
-            }    
+            }
         }
 
         private void BtnQuanLyBilliards_Click(object sender, EventArgs e)
@@ -85,6 +85,33 @@ namespace QuanLyQuanBilliards.Forms
             {
                 MessageBox.Show("Bạn không có quyền sử dụng chức năng này!",
        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void fOption_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Chỉ xử lý khi người dùng bấm nút X (UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Bạn có muốn đăng xuất và quay lại màn hình đăng nhập không?",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    fLogin login = new fLogin();
+                    login.Show();
+
+                    this.Hide();
+
+                    e.Cancel = true;
+                }
+                else if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
         }
     }

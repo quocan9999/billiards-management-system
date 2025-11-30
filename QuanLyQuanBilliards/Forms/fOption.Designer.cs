@@ -71,6 +71,7 @@
             this.Name = "fOption";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "fOption";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fOption_FormClosing);
             this.ResumeLayout(false);
 
         }
