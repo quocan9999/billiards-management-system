@@ -51,6 +51,7 @@ namespace QuanLyQuanBilliards.Forms
             btnThanhToan.Click += btnThanhToan_Click;
             btnBatDauTinhGio.Click += btnBatDauTinhGio_Click;
             btnTinhTienBan.Click += BtnTinhTienBan_Click;
+            btnChuyenBan.Click += BtnChuyenBan_Click;
 
             cboLocKhuVuc.SelectedIndexChanged += Filter_Changed;
             cboLocTrangThai.SelectedIndexChanged += Filter_Changed;
@@ -625,6 +626,51 @@ namespace QuanLyQuanBilliards.Forms
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 LoadInvoiceData(_selectedTableId);
+            }
+        }
+
+        private void BtnChuyenBan_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra đã chọn bàn chưa
+            if (_selectedTableId == -1)
+            {
+                MessageBox.Show("Vui lòng chọn bàn cần chuyển!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kiểm tra trạng thái bàn (chỉ cho phép chuyển bàn đang "Có khách")
+            var ban = db.Bans.AsNoTracking().FirstOrDefault(b => b.BanID == _selectedTableId);
+            if (ban == null) return;
+
+            if (ban.TrangThai == "Trống")
+            {
+                MessageBox.Show("Bàn đang trống, không thể chuyển!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (ban.TrangThai == "Chờ thanh toán")
+            {
+                MessageBox.Show("Bàn đang chờ thanh toán, không thể chuyển!\nVui lòng thanh toán hoặc hủy trước.",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Mở form chuyển bàn
+            fChuyenBan frm = new fChuyenBan(_selectedTableId);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                // Refresh giao diện sau khi chuyển bàn thành công
+                // Reset selection vì bàn cũ đã trống
+                _selectedTableId = -1;
+                lblInvoiceTitle.Text = "Hóa đơn bàn --";
+                lblMaHoaDon.Text = "Mã hóa đơn: --";
+                dgvHoaDon.Rows.Clear();
+                ResetTongTienUI();
+
+                // Reload danh sách bàn
+                LoadTables();
             }
         }
     }

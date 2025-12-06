@@ -68,6 +68,7 @@
             this.pnlServiceButton = new System.Windows.Forms.Panel();
             this.tlpActions = new System.Windows.Forms.TableLayoutPanel();
             this.btnBatDauTinhGio = new System.Windows.Forms.Button();
+            this.btnChuyenBan = new System.Windows.Forms.Button();
             this.btnTinhTienBan = new System.Windows.Forms.Button();
             this.btnHuyHoaDon = new System.Windows.Forms.Button();
             this.pnlRight = new System.Windows.Forms.Panel();
@@ -484,13 +485,15 @@
             // 
             // tlpActions
             // 
-            this.tlpActions.ColumnCount = 3;
-            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.tlpActions.ColumnCount = 4;
+            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpActions.Controls.Add(this.btnBatDauTinhGio, 0, 0);
-            this.tlpActions.Controls.Add(this.btnTinhTienBan, 1, 0);
-            this.tlpActions.Controls.Add(this.btnHuyHoaDon, 2, 0);
+            this.tlpActions.Controls.Add(this.btnChuyenBan, 1, 0);
+            this.tlpActions.Controls.Add(this.btnTinhTienBan, 2, 0);
+            this.tlpActions.Controls.Add(this.btnHuyHoaDon, 3, 0);
             this.tlpActions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpActions.Location = new System.Drawing.Point(0, 0);
             this.tlpActions.Name = "tlpActions";
@@ -506,20 +509,32 @@
             this.btnBatDauTinhGio.Location = new System.Drawing.Point(2, 2);
             this.btnBatDauTinhGio.Margin = new System.Windows.Forms.Padding(2);
             this.btnBatDauTinhGio.Name = "btnBatDauTinhGio";
-            this.btnBatDauTinhGio.Size = new System.Drawing.Size(187, 46);
+            this.btnBatDauTinhGio.Size = new System.Drawing.Size(139, 46);
             this.btnBatDauTinhGio.TabIndex = 0;
             this.btnBatDauTinhGio.Text = "Bắt đầu tính giờ";
             this.btnBatDauTinhGio.UseVisualStyleBackColor = false;
+            // 
+            // btnChuyenBan
+            // 
+            this.btnChuyenBan.BackColor = System.Drawing.Color.LightGray;
+            this.btnChuyenBan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnChuyenBan.Location = new System.Drawing.Point(145, 2);
+            this.btnChuyenBan.Margin = new System.Windows.Forms.Padding(2);
+            this.btnChuyenBan.Name = "btnChuyenBan";
+            this.btnChuyenBan.Size = new System.Drawing.Size(139, 46);
+            this.btnChuyenBan.TabIndex = 1;
+            this.btnChuyenBan.Text = "Chuyển bàn";
+            this.btnChuyenBan.UseVisualStyleBackColor = false;
             // 
             // btnTinhTienBan
             // 
             this.btnTinhTienBan.BackColor = System.Drawing.Color.LightGray;
             this.btnTinhTienBan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTinhTienBan.Location = new System.Drawing.Point(193, 2);
+            this.btnTinhTienBan.Location = new System.Drawing.Point(288, 2);
             this.btnTinhTienBan.Margin = new System.Windows.Forms.Padding(2);
             this.btnTinhTienBan.Name = "btnTinhTienBan";
-            this.btnTinhTienBan.Size = new System.Drawing.Size(187, 46);
-            this.btnTinhTienBan.TabIndex = 1;
+            this.btnTinhTienBan.Size = new System.Drawing.Size(139, 46);
+            this.btnTinhTienBan.TabIndex = 2;
             this.btnTinhTienBan.Text = "Tính tiền bàn";
             this.btnTinhTienBan.UseVisualStyleBackColor = false;
             // 
@@ -528,11 +543,11 @@
             this.btnHuyHoaDon.BackColor = System.Drawing.Color.IndianRed;
             this.btnHuyHoaDon.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnHuyHoaDon.ForeColor = System.Drawing.Color.White;
-            this.btnHuyHoaDon.Location = new System.Drawing.Point(384, 2);
+            this.btnHuyHoaDon.Location = new System.Drawing.Point(431, 2);
             this.btnHuyHoaDon.Margin = new System.Windows.Forms.Padding(2);
             this.btnHuyHoaDon.Name = "btnHuyHoaDon";
-            this.btnHuyHoaDon.Size = new System.Drawing.Size(188, 46);
-            this.btnHuyHoaDon.TabIndex = 2;
+            this.btnHuyHoaDon.Size = new System.Drawing.Size(141, 46);
+            this.btnHuyHoaDon.TabIndex = 3;
             this.btnHuyHoaDon.Text = "Hủy hóa đơn";
             this.btnHuyHoaDon.UseVisualStyleBackColor = false;
             // 
@@ -717,6 +732,7 @@
         private System.Windows.Forms.Panel pnlServiceButton;
         private System.Windows.Forms.TableLayoutPanel tlpActions;
         private System.Windows.Forms.Button btnBatDauTinhGio;
+        private System.Windows.Forms.Button btnChuyenBan;
         private System.Windows.Forms.Button btnTinhTienBan;
         private System.Windows.Forms.Button btnHuyHoaDon;
 

@@ -151,8 +151,6 @@ CREATE INDEX IX_HDCT_HD ON banhang.HoaDonChiTiet(HoaDonID);
 GO
 
 /* 5) BẢNG – BÁO CÁO DOANH THU (ĐƠN GIẢN) */
-DROP TABLE IF EXISTS baocao.BaoCao_DoanhThu;
-GO
 CREATE TABLE baocao.BaoCao_DoanhThu(
     BaoCaoID     INT IDENTITY(1,1),
     TuNgay       DATE NOT NULL,
@@ -164,8 +162,164 @@ CREATE TABLE baocao.BaoCao_DoanhThu(
 );
 GO
 /*=================================== 
-			DỮ LIỆU MẪU
+			STORE PROCEDURE
 ===================================*/
+CREATE PROCEDURE [banhang].[sp_HuyHoaDon]
+    @BanID INT
+AS
+BEGIN
+    -- 1. Tìm hóa đơn đang hoạt động (Mở hoặc Chờ thanh toán)
+    DECLARE @HoaDonID INT;
+    SELECT TOP 1 @HoaDonID = HoaDonID 
+    FROM banhang.HoaDon 
+    WHERE BanID = @BanID AND TrangThai IN (0, 1);
+
+    IF @HoaDonID IS NOT NULL
+    BEGIN
+        -- 2. XÓA VĨNH VIỄN HÓA ĐƠN
+        -- (SQL sẽ tự động xóa luôn các dòng trong HoaDonChiTiet nhờ cơ chế Cascade)
+        DELETE FROM banhang.HoaDon
+        WHERE HoaDonID = @HoaDonID;
+
+        -- 3. Trả trạng thái Bàn về 'Trống'
+        UPDATE danhmuc.Ban
+        SET TrangThai = N'Trống'
+        WHERE BanID = @BanID;
+    END
+END;
+GO
+
+-- Procedure: Lấy chi tiết hóa đơn để hiển thị lên lưới
+-- Giúp tính toán Thành Tiền ngay tại SQL, giảm tải cho C#
+CREATE PROCEDURE [banhang].[sp_LayChiTietHoaDon]
+    @BanID INT
+AS
+BEGIN
+    -- Tìm hóa đơn đang mở (TrangThai = 0) của bàn này
+    DECLARE @HoaDonID INT;
+    SELECT TOP 1 @HoaDonID = HoaDonID 
+    FROM banhang.HoaDon 
+    WHERE BanID = @BanID AND TrangThai = 0;
+
+    -- Nếu không có hóa đơn nào mở, trả về rỗng
+    IF @HoaDonID IS NULL
+    BEGIN
+        SELECT NULL WHERE 1 = 0; -- Trả về bảng rỗng
+        RETURN;
+    END
+
+    -- Trả về danh sách món ăn
+    SELECT 
+        ct.SanPhamID,
+        sp.TenSP,
+        ct.DonGia,
+        ct.SoLuong,
+        (ct.DonGia * ct.SoLuong) AS ThanhTien
+    FROM banhang.HoaDonChiTiet ct
+    JOIN danhmuc.SanPham sp ON ct.SanPhamID = sp.SanPhamID
+    WHERE ct.HoaDonID = @HoaDonID;
+END;
+GO
+
+CREATE PROCEDURE [banhang].[sp_TinhTienBan]
+    @BanID INT
+AS
+BEGIN
+    -- 1. Tìm hóa đơn
+    DECLARE @HoaDonID INT;
+    SELECT TOP 1 @HoaDonID = HoaDonID 
+    FROM banhang.HoaDon 
+    WHERE BanID = @BanID 
+      AND (TrangThai = 0 OR (TrangThai = 1 AND ThoiDiemThanhToan IS NOT NULL))
+    ORDER BY HoaDonID DESC;
+
+    IF @HoaDonID IS NULL RETURN; 
+
+    -- 2. Chốt giờ
+    DECLARE @GioKetThuc DATETIME2(0) = SYSDATETIME();
+    DECLARE @GioDaChot DATETIME2(0);
+    SELECT @GioDaChot = ThoiDiemThanhToan FROM banhang.HoaDon WHERE HoaDonID = @HoaDonID;
+
+    IF @GioDaChot IS NULL
+    BEGIN
+        UPDATE banhang.HoaDon
+        SET ThoiDiemThanhToan = @GioKetThuc, TrangThai = 1
+        WHERE HoaDonID = @HoaDonID;
+        
+        UPDATE danhmuc.Ban SET TrangThai = N'Chờ thanh toán' WHERE BanID = @BanID;
+    END
+    ELSE
+    BEGIN
+        SET @GioKetThuc = @GioDaChot;
+    END
+
+    -- 3. TÍNH TOÁN (Quan trọng: Phải có AS TienDichVu)
+    SELECT 
+        ISNULL((SELECT SUM(SoLuong * DonGia) 
+                FROM banhang.HoaDonChiTiet 
+                WHERE HoaDonID = @HoaDonID), 0) AS TienDichVu, -- <--- TÊN CỘT PHẢI CHUẨN
+
+        DATEDIFF(SECOND, ThoiDiemBatDau, @GioKetThuc) AS SoGiayChoi,
+
+        (SELECT TOP 1 lb.GiaTheoGio 
+         FROM danhmuc.Ban b JOIN danhmuc.LoaiBan lb ON b.LoaiBanID = lb.LoaiBanID 
+         WHERE b.BanID = @BanID) AS GiaTheoGio
+    FROM banhang.HoaDon
+    WHERE HoaDonID = @HoaDonID;
+END;
+GO
+
+CREATE PROCEDURE [banhang].[sp_ThanhToanDayDu]
+    @BanID INT,
+    @TongTienCuoiCung DECIMAL(18,2), -- Số tiền khách trả thực tế
+    @TongTienTruocGiam DECIMAL(18,2) -- MỚI: Số tiền gốc chưa giảm
+AS
+BEGIN
+    DECLARE @HoaDonID INT;
+    SELECT TOP 1 @HoaDonID = HoaDonID 
+    FROM banhang.HoaDon 
+    WHERE BanID = @BanID AND TrangThai IN (0, 1);
+
+    IF @HoaDonID IS NOT NULL
+    BEGIN
+        UPDATE banhang.HoaDon
+        SET TongThanhToan = @TongTienCuoiCung,
+            TongTienTruocGiam = @TongTienTruocGiam, -- Cập nhật cột mới
+            TrangThai = 1, 
+            ThoiDiemThanhToan = ISNULL(ThoiDiemThanhToan, SYSDATETIME()) 
+        WHERE HoaDonID = @HoaDonID;
+
+        UPDATE danhmuc.Ban
+        SET TrangThai = N'Trống'
+        WHERE BanID = @BanID;
+    END
+END;
+GO
+
+CREATE PROCEDURE [baocao].[sp_BaoCaoDoanhThu]
+    @TuNgay DATE,
+    @DenNgay DATE
+AS
+BEGIN
+    SELECT 
+        hd.HoaDonID AS [Mã HĐ],
+        b.TenBan AS [Tên Bàn],
+        hd.TongThanhToan AS [Tổng Tiền],
+        hd.ThoiDiemThanhToan AS [Ngày Thanh Toán],
+        hd.GiaTriGiam AS [Giảm Giá],
+        CASE 
+            WHEN hd.LoaiGiamGia = 1 THEN N'Theo %'
+            WHEN hd.LoaiGiamGia = 2 THEN N'Theo tiền'
+            ELSE N'Không'
+        END AS [Loại Giảm]
+    FROM banhang.HoaDon hd
+    JOIN danhmuc.Ban b ON hd.BanID = b.BanID
+    WHERE hd.TrangThai = 1
+      AND CAST(hd.ThoiDiemThanhToan AS DATE) >= @TuNgay
+      AND CAST(hd.ThoiDiemThanhToan AS DATE) <= @DenNgay
+    ORDER BY hd.HoaDonID ASC; -- Sửa thành ASC (Tăng dần)
+END;
+GO
 /*===================================
             DỮ LIỆU MẪU
 ===================================*/
