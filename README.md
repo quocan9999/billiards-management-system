@@ -47,7 +47,7 @@
 ### Bước 1: Clone Dự Án
 
 ```bash
-git clone https://github.com/quocan9999/billiards-management-system.git
+https://github.com/quocan9999/billiards-management-system.git
 cd billiards-management-system
 ```
 
