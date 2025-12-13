@@ -1437,5 +1437,3 @@ GO
 REVOKE SELECT, INSERT, UPDATE, DELETE ON SCHEMA::banhang FROM dbrole_NhanVien;
 GO
 */
-REVOKE EXECUTE ON SCHEMA::banhang FROM dbrole_NhanVien;
-GO
