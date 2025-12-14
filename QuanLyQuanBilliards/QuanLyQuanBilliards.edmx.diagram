@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6930792a1e5648088944a2b22c1b1ca1" Name="Diagram1">
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.HoaDon" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.HoaDonChiTiet" Width="1.5" PointX="7.5" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.BaoCao_DoanhThu" Width="1.5" PointX="7.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.Ban" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.DanhMuc" Width="1.5" PointX="3" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.KhuVuc" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.LoaiBan" Width="1.5" PointX="0.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.SanPham" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.NguoiDung" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyQuanBilliardsModel.NhanVien" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_HoaDon_Ban" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_HoaDon_NguoiDung" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_HoaDonChiTiet_HoaDon" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_HoaDonChiTiet_SanPham" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_Ban_KhuVuc" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_Ban_LoaiBan" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_SanPham_DanhMuc" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyQuanBilliardsModel.FK_NhanVien_NguoiDung" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
