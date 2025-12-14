@@ -1431,3 +1431,37 @@ GO
 */
 --REVOKE EXECUTE ON SCHEMA::banhang FROM dbrole_NhanVien;
 --GO
+
+
+
+/* ===================================================================
+   SAO LƯU DỮ LIỆU (BACKUP) - MÔ HÌNH FULL RECOVERY
+   Lịch sao lưu:
+     - Full Backup       : 23:00 hàng ngày
+     - Differential Backup: 15:00 hàng ngày
+     - Transaction Log   : Mỗi 30 phút
+   =================================================================== */
+
+-- 1) Thiết lập Recovery Model = FULL
+USE master;
+GO
+ALTER DATABASE QuanLyQuanBilliards SET RECOVERY FULL;
+GO
+
+-- 2) FULL BACKUP (Chạy lúc 23:00 hàng ngày)
+BACKUP DATABASE [QuanLyQuanBilliards]
+TO DISK = N'C:\SQLBackup\QuanLyQuanBilliards_FULL.bak'
+WITH FORMAT, INIT, NAME = N'Full Backup', COMPRESSION;
+GO
+
+-- 3) DIFFERENTIAL BACKUP (Chạy lúc 15:00 hàng ngày)
+BACKUP DATABASE [QuanLyQuanBilliards]
+TO DISK = N'C:\SQLBackup\QuanLyQuanBilliards_DIFF.bak'
+WITH DIFFERENTIAL, INIT, NAME = N'Differential Backup', COMPRESSION;
+GO
+
+-- 4) TRANSACTION LOG BACKUP (Chạy mỗi 30 phút)
+BACKUP LOG [QuanLyQuanBilliards]
+TO DISK = N'C:\SQLBackup\QuanLyQuanBilliards_LOG.trn'
+WITH INIT, NAME = N'Transaction Log Backup', COMPRESSION;
+GO
